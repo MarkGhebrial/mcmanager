@@ -63,11 +63,11 @@ impl Manager {
         });
     }
 
-    /// Print all the lines in the reviever's buffer
-    pub fn print_recieved_lines(&self) {
+    /// Call the closure for each line in the reciever's buffer
+    pub fn handle_recieved_lines<F>(&self, f: F) where F: Fn(String) {
         if let Some (rx) = &self.reciever {
             for line in rx.try_iter() {
-                println!("{}", line);
+                f(line);
             }
         }
     }

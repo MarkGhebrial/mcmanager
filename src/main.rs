@@ -5,6 +5,8 @@ fn main() {
     let mut server = Manager::new();
     server.start();
     loop {
-        server.print_recieved_lines()
+        server.handle_recieved_lines(|line| {
+            println!("{}", line);
+        });
     }
 }
