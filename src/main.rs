@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::prelude::*;
+use std::{ thread, time::Duration };
 
 use serde_derive::Deserialize;
 
@@ -10,7 +11,8 @@ use discord::*;
 
 #[derive(Deserialize)]
 struct Config {
-    discord_url: Option<String>
+    discord_url: Option<String>,
+    server_directory: Option<String>
 }
 
 fn main() {
@@ -26,18 +28,28 @@ fn main() {
         Some(s) => Some(DiscordWebhook::new(&s)),
         None => None
     }; 
-
-    let action = move |line| {
-        match &webhook {
-            Some(w) => w.post_string(&line).unwrap(),
-            _ => println!("No webhook!")
-        };
-        println!("Message: {}", line);
-    };
+    
     //{ action(String::from("testing")); }
 
     let mut server = Manager::new();
+    if let Some(s) = config.server_directory {
+        server.server_directory(&s);
+    }
     server.start();
+
+    let action = |line: String| {
+        /*match &webhook {
+            Some(w) => w.post_string(&line).unwrap(),
+            _ => println!("No webhook!")
+        };*/
+        println!("Message: {}", line);
+        if let Some(_) = line.find("[Server thread/INFO]: Done") {
+            thread::sleep(Duration::from_secs(5));
+            println!("Stopping the server");
+            server.send_command(String::from("stop")).unwrap();
+        }
+    };
+
     loop {
         server.handle_recieved_lines(&action);
     }
