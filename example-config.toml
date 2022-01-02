@@ -1,0 +1,22 @@
+# MCManager uses a TOML file named `mcmanager.toml` to 
+# configure its behavior. That file must be placed in the
+# working directory used to start the tool.
+# 
+# The following fields are accepted:
+
+# *OPTIONAL*
+# The URL of a discord channel webhook. If configured, each
+# line of output from the server will be sent as a message 
+# to that channel.
+discord_url = "https://discord.com/api/webhooks/{webhook.id}/{webhook.token}"
+
+# *OPTIONAL*
+# The path to the directory containing the server.jar file.
+# If left empty, the current working directory will be used
+# to start the server.
+server_directory = "/some/absolute/path"
+
+# *OPTIONAL SECTION*
+[backups]
+schedule = "* * * * *" # cron schedule for backing up the server
+directory = "/home/markg/Desktop/backuptest"
