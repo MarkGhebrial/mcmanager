@@ -123,7 +123,6 @@ impl Manager {
     pub fn handle_recieved_lines<F>(&self, f: &F) where F: Fn(String) {
         if let Some (rx) = &self.reciever {
             for line in rx.try_iter() {
-                println!("Executing closure");
                 f(line);
             }
         }
