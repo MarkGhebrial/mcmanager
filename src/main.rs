@@ -6,6 +6,8 @@ use serde_derive::Deserialize;
 
 mod server_manager;
 mod discord;
+mod server_tasks;
+
 use server_manager::*;
 use discord::*;
 
